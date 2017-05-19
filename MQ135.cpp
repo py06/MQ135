@@ -111,7 +111,7 @@ float MQ135::getCorrectedPPM(float t, float h) {
 @return The sensor resistance RZero in kOhm
 */
 /**************************************************************************/
-float MQ135::getRZero() {
+float MQ135::measureRZero() {
   return getResistance() * pow((ATMOCO2/PARA), (1./PARB));
 }
 
@@ -126,6 +126,6 @@ float MQ135::getRZero() {
 @return The corrected sensor resistance RZero in kOhm
 */
 /**************************************************************************/
-float MQ135::getCorrectedRZero(float t, float h) {
+float MQ135::measureCorrectedRZero(float t, float h) {
   return getCorrectedResistance(t, h) * pow((ATMOCO2/PARA), (1./PARB));
 }
