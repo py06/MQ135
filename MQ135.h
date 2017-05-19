@@ -44,15 +44,25 @@ v1.0 - First release
 class MQ135 {
  private:
   uint8_t _pin;
+  float _atmoco2;
+  float _rload;
+  float _rzero;
 
  public:
-  MQ135(uint8_t pin);
-  float getCorrectionFactor(float t, float h);
-  float getResistance();
-  float getCorrectedResistance(float t, float h);
-  float getPPM();
-  float getCorrectedPPM(float t, float h);
-  float getRZero();
-  float getCorrectedRZero(float t, float h);
+  MQ135(uint8_t);
+  MQ135(uint8_t, float, float);
+  float getCorrectionFactor(float, float);
+  float getResistance(void);
+  float getCorrectedResistance(float, float);
+  float getPPM(void);
+  float getCorrectedPPM(float, float);
+  float measureRZero(void);
+  float measureCorrectedRZero(float, float);
+  float getAtmoco2(void);
+  void setAtmoco2(float);
+  float getRload(void);
+  void setRload(float);
+  float getRzero(void);
+  void setRzero(float);
 };
 #endif

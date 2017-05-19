@@ -26,8 +26,104 @@ v1.0 - First release
 
 MQ135::MQ135(uint8_t pin) {
   _pin = pin;
+  _rzero = RZERO;
+  _rload = RLOAD;
+  _atmoco2 = ATMOCO2;
 }
 
+/**************************************************************************/
+/*!
+@brief  constructor
+
+@param[in] pin  The analog input pin for the readout of the sensor
+@param[in] rl	The load resistance of you design in kOhm
+@param[in] ppm  Atmospheric CO2 concentration (http://www.co2.earth)
+*/
+/**************************************************************************/
+MQ135::MQ135(uint8_t pin, float rl, float ppm) {
+  _pin = pin;
+  _rzero = RZERO;
+  _rload = rl;
+  _atmoco2 = ppm;
+}
+
+/**************************************************************************/
+/*!
+@brief  Get the atmospehric CO2 concentrarion currently used
+
+@return Atmospheric CO2 concentration used
+
+*/
+/**************************************************************************/
+float MQ135::getAtmoco2()
+{
+	return _atmoco2;
+}
+
+/**************************************************************************/
+/*!
+@brief  Set the atmospehric CO2 concentrarion used in calibration
+
+@param[in] ppm  Atmospheric CO2 concentration (ex https://www.co2.earth/)
+
+*/
+/**************************************************************************/
+void MQ135::setAtmoco2(float ppm)
+{
+	_atmoco2 = ppm;
+}
+
+/**************************************************************************/
+/*!
+@brief  Get the load resistance currently used
+
+@return load resistance currently used
+
+*/
+/**************************************************************************/
+float MQ135::getRload()
+{
+	return _rload;
+}
+
+/**************************************************************************/
+/*!
+@brief  Set the load resistance value
+
+@param[in] r  resistance value in kOhm (ex: 10.)
+
+*/
+/**************************************************************************/
+void MQ135::setRload(float r)
+{
+	_rload = r;
+}
+
+/**************************************************************************/
+/*!
+@brief  Get rzero value
+
+@return load resistance currently used
+
+*/
+/**************************************************************************/
+float MQ135::getRzero()
+{
+	return _rzero;
+}
+
+/**************************************************************************/
+/*!
+@brief  Set rzero value (obtained after calibration)
+
+@param[in] r  resistance value in kOhm
+
+*/
+/**************************************************************************/
+void MQ135::setRzero(float r)
+{
+	_rzero = r;
+}
 
 /**************************************************************************/
 /*!
@@ -60,7 +156,7 @@ float MQ135::getCorrectionFactor(float t, float h) {
 /**************************************************************************/
 float MQ135::getResistance() {
   int val = analogRead(_pin);
-  return ((1023./(float)val) * 5. - 1.)*RLOAD;
+  return ((1023./(float)val) - 1.)*_rload;
 }
 
 /**************************************************************************/
@@ -86,7 +182,7 @@ float MQ135::getCorrectedResistance(float t, float h) {
 */
 /**************************************************************************/
 float MQ135::getPPM() {
-  return PARA * pow((getResistance()/RZERO), -PARB);
+  return PARA * pow((getResistance()/_rzero), -PARB);
 }
 
 /**************************************************************************/
@@ -101,7 +197,7 @@ float MQ135::getPPM() {
 */
 /**************************************************************************/
 float MQ135::getCorrectedPPM(float t, float h) {
-  return PARA * pow((getCorrectedResistance(t, h)/RZERO), -PARB);
+  return PARA * pow((getCorrectedResistance(t, h)/_rzero), -PARB);
 }
 
 /**************************************************************************/
