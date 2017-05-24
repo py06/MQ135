@@ -57,6 +57,8 @@ MQ135::MQ135(uint8_t pin, float rl, float ppm) {
 /**************************************************************************/
 float MQ135::getAtmoco2()
 {
+	if (_atmoco2 == 0)
+		return ATMOCO2;
 	return _atmoco2;
 }
 
@@ -70,7 +72,10 @@ float MQ135::getAtmoco2()
 /**************************************************************************/
 void MQ135::setAtmoco2(float ppm)
 {
-	_atmoco2 = ppm;
+	if (ppm == 0)
+		_atmoco2 = ATMOCO2;
+	else
+		_atmoco2 = ppm;
 }
 
 /**************************************************************************/
@@ -83,6 +88,8 @@ void MQ135::setAtmoco2(float ppm)
 /**************************************************************************/
 float MQ135::getRload()
 {
+	if (_rload == 0)
+		return RLOAD;
 	return _rload;
 }
 
@@ -96,7 +103,10 @@ float MQ135::getRload()
 /**************************************************************************/
 void MQ135::setRload(float r)
 {
-	_rload = r;
+	if (r == 0)
+		_rload = RLOAD;
+	else
+		_rload = r;
 }
 
 /**************************************************************************/
@@ -109,6 +119,8 @@ void MQ135::setRload(float r)
 /**************************************************************************/
 float MQ135::getRzero()
 {
+	if (_rzero == 0.)
+		return RZERO;
 	return _rzero;
 }
 
@@ -122,7 +134,10 @@ float MQ135::getRzero()
 /**************************************************************************/
 void MQ135::setRzero(float r)
 {
-	_rzero = r;
+	if (r == 0)
+		_rzero = RZERO;
+	else
+		_rzero = r;
 }
 
 /**************************************************************************/
@@ -208,7 +223,7 @@ float MQ135::getCorrectedPPM(float t, float h) {
 */
 /**************************************************************************/
 float MQ135::measureRZero() {
-  return getResistance() * pow((ATMOCO2/PARA), (1./PARB));
+  return getResistance() * pow((_atmoco2/PARA), (1./PARB));
 }
 
 /**************************************************************************/
@@ -223,5 +238,5 @@ float MQ135::measureRZero() {
 */
 /**************************************************************************/
 float MQ135::measureCorrectedRZero(float t, float h) {
-  return getCorrectedResistance(t, h) * pow((ATMOCO2/PARA), (1./PARB));
+  return getCorrectedResistance(t, h) * pow((_atmoco2/PARA), (1./PARB));
 }
